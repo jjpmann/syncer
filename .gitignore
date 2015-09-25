@@ -1,0 +1,6 @@
+# Exclude composer components
+vendor
+composer.lock
+
+# Exclude phpstorm project folder
+.idea/
