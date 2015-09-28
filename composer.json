@@ -1,5 +1,6 @@
 {
   "require": {
-    "illuminate/remote" : "dev-master"
+    "illuminate/remote" : "dev-master",
+    "symfony/console" : "dev-master"
   }
 }
