@@ -33,6 +33,14 @@ interface CredentialInterface {
     **/
     public function user();
 
+    /**
+     * Returns the secret. If a password, then then password. If we're using a
+     * public key authentication then it returns the public key location
+     *
+     * return String
+     **/
+     public function secret();
+
 
  
 }
