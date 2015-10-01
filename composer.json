@@ -1,6 +1,27 @@
 {
+  "name": "goce/Syncer",
+  "description": "Synder is a command line tool that provides a way to sync Drupal and ExpressionEngine databases from local to remote servers via ssh",
+  "license": "MIT",
+  "keywords": ["syncer, ssh"],
+  "authors": [
+    {
+      "name": "Goce Evtimovski",
+      "email": "goce@lmo.com"
+    }
+  ],
   "require": {
-    "illuminate/remote" : "dev-master",
+    "php": ">=5.5.3",
+    "illuminate/remote" : "dev-master"
+  },
+  "think-about":{
     "symfony/console" : "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Syncer\\": "src/"
+    }
   }
 }

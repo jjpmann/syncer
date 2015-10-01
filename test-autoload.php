@@ -9,6 +9,8 @@ require 'vendor/autoload.php';
  */
 
 use Illuminate\Remote;
+use Syncer\SSH;
+use Syncer\Credential\Credential;
 
 $conn = [
   'name' => 'lmodev',
@@ -19,12 +21,19 @@ $conn = [
   ]
 ];
 
-//$c = new Remote\SecLibGateway($conn['host'],$conn['auth'],new \Illuminate\Filesystem\Filesystem());
+/*
 $connection = new Remote\Connection('remote', 'lmodev2.lmo.com', 'vimdev',
   ['key' => $conn['auth']['key']]);
 $connection->run("ls -all", function ($line) {
   echo "printing line" . PHP_EOL;
+});*/
+
+$cred = new Credential($conn['name'],$conn['host'],$conn['username'],$conn['auth']['key']);
+
+$ssh = new SSH('default',$cred);
+
+$ssh->run('ls -all',function($line){
+  echo "printing line" . PHP_EOL;
+  echo $line;
 });
-
-
 
