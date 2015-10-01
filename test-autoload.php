@@ -10,7 +10,7 @@ require 'vendor/autoload.php';
 
 use Illuminate\Remote;
 use Syncer\SSH;
-use Syncer\Credential\Credential;
+use Syncer\Credential\SshPubkeyAuthCredential;
 
 $conn = [
   'name' => 'lmodev',
@@ -28,7 +28,9 @@ $connection->run("ls -all", function ($line) {
   echo "printing line" . PHP_EOL;
 });*/
 
-$cred = new Credential($conn['name'],$conn['host'],$conn['username'],$conn['auth']['key']);
+
+/* Make a remote SSH Connection
+$cred = new SshPubkeyAuthCredential($conn['name'],$conn['host'],$conn['username'],$conn['auth']['key']);
 
 $ssh = new SSH('default',$cred);
 
@@ -36,4 +38,5 @@ $ssh->run('ls -all',function($line){
   echo "printing line" . PHP_EOL;
   echo $line;
 });
+/**/
 

@@ -20,6 +20,10 @@
     "phpunit/phpunit": "4.0.*"
   },
   "autoload": {
+    "classmap": [
+      "src/",
+      "src/Credential"
+    ],
     "psr-4": {
       "Syncer\\": "src/"
     }

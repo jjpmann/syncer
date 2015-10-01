@@ -8,6 +8,7 @@
 
 namespace Syncer\Credential;
 
+use Syncer\Credential\CredentialInterface;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
