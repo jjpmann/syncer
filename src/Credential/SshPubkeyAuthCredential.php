@@ -19,7 +19,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
  *
  * Description:
  */
-class SshPubkeyAuthCredential extends Credential{
+class SshPubkeyAuthCredential extends Credential {
 
   /**
    * The identity file location used during the public key authentication process
@@ -35,17 +35,17 @@ class SshPubkeyAuthCredential extends Credential{
    */
   protected $port;
 
-  public function __construct($name,$host,$username,$keyLocation,$port=22){
+  public function __construct($name, $username, $keyLocation, $host, $port = 22) {
     $file = new Filesystem();
 
-    if(!$file->isFile($keyLocation)){
+    if (!$file->isFile($keyLocation)) {
       throw new FileNotFoundException("Private key file doesn't exist at " . $keyLocation);
     }
 
     $this->keyLocation = $keyLocation;
     $this->port = $port;
 
-    parent::__construct($name,$host,$username,$keyLocation);
+    parent::__construct($name, $host, $username, $keyLocation);
   }
 
   /**
@@ -53,7 +53,7 @@ class SshPubkeyAuthCredential extends Credential{
    *
    * @return String
    */
-  public function secret(){
+  public function secret() {
     return $this->keyLocation;
   }
 
