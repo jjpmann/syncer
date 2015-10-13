@@ -61,15 +61,31 @@ class RemoteImporterCommand extends Command {
 
     $fileName = $filesystem->name($file);
 
-    $remoteFile = '/tmp/' . $fileName;
+    $remoteFile = $fileName;
     $remote->put($file, $remoteFile);
 
+    $output->writeln("File transfered. Importing into database");
+
+    $mysqlCommandFormat = "mysql -u %s -p'%s' %s < %s";
+    $mysqlImportCommand = sprintf($mysqlCommandFormat, $vars['db-user'], $vars['db-password'], $vars['db-name'],$remoteFile);
+
+    $mysqlDropDbCommand = sprintf("mysql -u %s -p'%s' -e 'DROP DATABASE %s;'",$vars['db-user'],$vars['db-password'],$vars['db-name']);
+    $mysqlCreateDbCommand = sprintf("mysql -u %s -p'%s' -e 'CREATE DATABASE %s;'",$vars['db-user'],$vars['db-password'],$vars['db-name']);
+
+
+    $remote->run($mysqlDropDbCommand, function($line) use ($output) {
+    });
+
+    $remote->run($mysqlCreateDbCommand, function($line) use ($output) {
+    });
+
+    $remote->run($mysqlImportCommand, function($line) use ($output) {
+      $output->writeln($line);
+    });
+
+    $remote->run('rm ' . $remoteFile, function($line){
+    });
+
     $output->writeln("Remote Importer is ALL DONE !!!");
-
-    //$mysqlCommandFormat = "mysql -u %s -p'%s' %s < %s";
-    //$mysqlImportCommand = sprintf($mysqlCommandFormat,$vars['db-user'],$vars['db-password'],$vars['db-name'],$remoteDirectory . '/'. $file);
-    //$remote->run()
-    //mysql -u username -p'password' dbname < sqlfile
-
   }
 }

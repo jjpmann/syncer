@@ -8,4 +8,5 @@ use Symfony\Component\Console\Application;
 $app = new Application();
 $app->add(new FileDumperCommand());
 $app->add(new \Syncer\Command\RemoteImporterCommand());
+$app->add(new \Syncer\Command\SyncCommand());
 $app->run();
