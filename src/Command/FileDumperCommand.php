@@ -23,30 +23,31 @@ class FileDumperCommand extends Command {
     $this
       ->setName('dump:local')
       ->setDescription('Dump a local database file')
-      ->addArgument('db-username',InputArgument::REQUIRED,"The database user")
-      ->addArgument('db-password',InputArgument::REQUIRED,"The database password")
-      ->addArgument('db-name',InputArgument::REQUIRED,"The database name");
+      ->addArgument('db-username', InputArgument::REQUIRED, "The database user")
+      ->addArgument('db-password', InputArgument::REQUIRED, "The database password")
+      ->addArgument('db-name', InputArgument::REQUIRED, "The database name")
+      ->addArgument('filename', InputArgument::REQUIRED, "The sql file");
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output)
-  {
+  protected function execute(InputInterface $input, OutputInterface $output) {
     $user = $input->getArgument('db-username');
     $pass = $input->getArgument('db-password');
     $dbName = $input->getArgument('db-name');
+    $filename = $input->getArgument('filename');
 
     $format = "mysqldump -u %s -p%s %s > %s";
 
-    $filename = '/tmp/' . DatabaseOperations::generateFilename($dbName);
+    //$filename = '/tmp/' . DatabaseOperations::generateFilename($dbName);
 
-    $command = sprintf($format,$user,$pass,$dbName,$filename);
+    $command = sprintf($format, $user, $pass, $dbName, $filename);
 
     $proc = new Process($command);
 
-    $output->writeln(sprintf("Dumping local database %s to %s",$dbName,$filename));
+    $output->writeln(sprintf("Dumping local database %s to %s", $dbName, $filename));
 
     $proc->run();
 
-    if(!$proc->isSuccessful()){
+    if (!$proc->isSuccessful()) {
       $output->writeln("Oooops ... there was an error you should fix otherwise we can't dump the local file. Here's the error.");
       $output->writeln($proc->getErrorOutput());
     }
