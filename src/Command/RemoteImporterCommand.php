@@ -41,11 +41,27 @@ class RemoteImporterCommand extends Command {
 
     $filesystem = new Filesystem();
 
+
     if (!$filesystem->isFile($file)) {
       throw new FileNotFoundException("We could not find the file you wanted to send to the remote server");
     }
 
     $vars = $input->getArguments();
+
+    $keyLocation = $vars['ssh-secret'];
+
+
+    if(!$filesystem->isFile($keyLocation)){
+      $output->writeln(sprintf('<error>Oh NO! We couldn\'t find the private key located here: %s Maybe use the absolute path?</error>',$keyLocation));
+
+      $pattern = '/^~\//i';
+      if(preg_match($pattern,$keyLocation) === 1){
+        $output->writeln('<error>Maybe use the absolute path?</error>');
+      }
+
+      $output->writeln('<error>We are going to bail and let you fix this. </error>');
+      return;
+    }
 
     $auth = [
       'key' => $vars['ssh-secret'],
@@ -67,23 +83,29 @@ class RemoteImporterCommand extends Command {
     $output->writeln("File transfered. Importing into database");
 
     $mysqlCommandFormat = "mysql -u %s -p'%s' %s < %s";
-    $mysqlImportCommand = sprintf($mysqlCommandFormat, $vars['db-user'], $vars['db-password'], $vars['db-name'],$remoteFile);
+    $mysqlImportCommand = sprintf($mysqlCommandFormat, $vars['db-user'], $vars['db-password'], $vars['db-name'],
+      $remoteFile);
 
-    $mysqlDropDbCommand = sprintf("mysql -u %s -p'%s' -e 'DROP DATABASE %s;'",$vars['db-user'],$vars['db-password'],$vars['db-name']);
-    $mysqlCreateDbCommand = sprintf("mysql -u %s -p'%s' -e 'CREATE DATABASE %s;'",$vars['db-user'],$vars['db-password'],$vars['db-name']);
+    $mysqlDropDbCommand = sprintf("mysql -u %s -p'%s' -e 'DROP DATABASE %s;'", $vars['db-user'], $vars['db-password'],
+      $vars['db-name']);
+    $mysqlCreateDbCommand = sprintf("mysql -u %s -p'%s' -e 'CREATE DATABASE %s;'", $vars['db-user'],
+      $vars['db-password'], $vars['db-name']);
 
 
-    $remote->run($mysqlDropDbCommand, function($line) use ($output) {
+    $remote->run($mysqlDropDbCommand, function ($line) use ($output) {
     });
 
-    $remote->run($mysqlCreateDbCommand, function($line) use ($output) {
+    $remote->run($mysqlCreateDbCommand, function ($line) use ($output) {
     });
 
-    $remote->run($mysqlImportCommand, function($line) use ($output) {
+    $remote->run($mysqlImportCommand, function ($line) use ($output) {
       $output->writeln($line);
     });
 
-    $remote->run('rm ' . $remoteFile, function($line){
+    /*
+     * Cleanup the remote machine
+     */
+    $remote->run('rm ' . $remoteFile, function ($line) {
     });
 
     $output->writeln("Remote Importer is ALL DONE !!!");

@@ -48,11 +48,12 @@ class FileDumperCommand extends Command {
     $proc->run();
 
     if (!$proc->isSuccessful()) {
-      $output->writeln("Oooops ... there was an error you should fix otherwise we can't dump the local file. Here's the error.");
+      $output->writeln("Oooops ... there was an error you should fix otherwise we can't dump the database to a file. Here's the error:");
       $output->writeln($proc->getErrorOutput());
+      return;
     }
 
     $output->writeln($proc->getOutput());
-    $output->writeln("Dumpper is ALL DONE!!!");
+    $output->writeln(sprintf("Dumper is ALL DONE!!! Database %s dumped at %s",$dbName,$filename));
   }
 }

@@ -25,6 +25,9 @@ class SyncCommand extends Command {
     $yaml = new Parser();
     $dumper = new Dumper();
 
+
+    $output->writeln('<info>Reading credentials </info>');
+
     $settings = $yaml->parse(file_get_contents('.syncer.settings.yml'));
 
     $from = $input->getOption('from');
@@ -37,7 +40,7 @@ class SyncCommand extends Command {
 
     $remoteSshHost = $settings[$to]['ssh']['host'];
     $remoteSshUsername = $settings[$to]['ssh']['username'];
-    $remoteSshPassword = $settings[$to]['ssh']['private-key'];
+    $remoteSshKey = $settings[$to]['ssh']['private-key'];
 
 
     $remoteDbHost = $settings[$to]['database']['host'];
@@ -45,10 +48,8 @@ class SyncCommand extends Command {
     $remoteDbPassword = $settings[$to]['database']['password'];
     $remoteDbDatabase = $settings[$to]['database']['database'];
 
-    //$output->writeln([$localDbUsername,$localDbPassword,$localDbDatabase]);
-    //$output->writeln([$remoteSshHost,$remoteSshUsername,$remoteSshPassword]);
-    //$output->writeln([$remoteDbHost,$remoteDbUsername,$remoteDbPassword,$remoteDbDatabase]);
 
+    $output->writeln("<info>Dumping Local Database</info>");
 
     $filename = '/tmp/' . DatabaseOperations::generateFilename($localDbDatabase);
     $dumperCommand = $this->getApplication()->find('dump:local');
@@ -61,9 +62,36 @@ class SyncCommand extends Command {
     ];
     $dumperInput = new ArrayInput($dumperArguments);
     $dumperReturnCode = $dumperCommand->run($dumperInput,$output);
-    $output->write($dumperReturnCode);
+
+    //$output->write($dumperReturnCode);
+
+
+    $remoteImporterCommand = $this->getApplication()->find('remote:import');
+    $importerArguments = [
+      'ssh-host'  => $remoteSshHost,
+      'ssh-user'  => $remoteSshUsername,
+      'ssh-secret'  => $remoteSshKey,
+      'db-server' => $remoteDbHost,
+      'db-user' => $remoteDbUsername,
+      'db-password' => $remoteDbPassword,
+      'db-name' => $remoteDbDatabase,
+      'sql-file'  => $filename,
+    ];
+    $remoteImporterInput = new ArrayInput($importerArguments);
+
+    $output->writeln("<info> Transferring sql to remote host and importing </info>");
+
+    try{
+      $remoteImporterCmdStatus = $remoteImporterCommand->run($remoteImporterInput,$output);
+    }catch (\InvalidArgumentException $e){
+      $output->writeln("<error>Yikes!!! Missing an argument in the remote importer. See bellow</error>");
+      $output->writeln('<error>' . $e->getMessage() . '</error>');
+    }
+
+    //$output->writeln($remoteImporterResponse);
     //$output->write($dumper->dump($settings,4,4));
     //$output->writeln($settings);
   }
+
 }
 
