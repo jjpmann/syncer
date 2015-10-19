@@ -11,10 +11,10 @@
   ],
   "require": {
     "php": ">=5.5.3",
-    "illuminate/remote" : "dev-master"
-  },
-  "think-about":{
-    "symfony/console" : "dev-master"
+    "illuminate/remote" : "dev-master",
+    "symfony/console" : "dev-master",
+    "symfony/process" : "dev-master",
+    "symfony/yaml": "^2.7"
   },
   "require-dev": {
     "phpunit/phpunit": "4.0.*"
