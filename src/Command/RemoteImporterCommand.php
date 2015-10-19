@@ -41,7 +41,6 @@ class RemoteImporterCommand extends Command {
 
     $filesystem = new Filesystem();
 
-
     if (!$filesystem->isFile($file)) {
       throw new FileNotFoundException("We could not find the file you wanted to send to the remote server");
     }
@@ -52,7 +51,7 @@ class RemoteImporterCommand extends Command {
 
 
     if(!$filesystem->isFile($keyLocation)){
-      $output->writeln(sprintf('<error>Oh NO! We couldn\'t find the private key located here: %s Maybe use the absolute path?</error>',$keyLocation));
+      $output->writeln(sprintf('<error>Oh NO! We couldn\'t find the private key located here: %s</error>',$keyLocation));
 
       $pattern = '/^~\//i';
       if(preg_match($pattern,$keyLocation) === 1){
