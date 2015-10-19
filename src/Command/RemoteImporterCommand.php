@@ -55,7 +55,7 @@ class RemoteImporterCommand extends Command {
 
       $pattern = '/^~\//i';
       if(preg_match($pattern,$keyLocation) === 1){
-        $output->writeln('<error>Maybe use the absolute path?</error>');
+        $output->writeln('<error>Maybe use the key absolute path?</error>');
       }
 
       $output->writeln('<error>We are going to bail and let you fix this. </error>');

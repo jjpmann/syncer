@@ -65,7 +65,6 @@ class SyncCommand extends Command {
 
     //$output->write($dumperReturnCode);
 
-
     $remoteImporterCommand = $this->getApplication()->find('remote:import');
     $importerArguments = [
       'ssh-host'  => $remoteSshHost,
