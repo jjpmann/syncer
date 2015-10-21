@@ -29,7 +29,7 @@ class SettingsDiscoverCommand extends Command {
   protected function configure() {
     $this
       ->setName("settings:list")
-      ->setDescription("Lists the available settings it can find. It could be from a yaml file or .")
+      ->setDescription("Lists the available settings it can find. It could be from a yaml file or CMS specific.")
       ->addOption("help",'h',InputOption::VALUE_NONE,"Provide help")
       //->addArgument('env', InputArgument::OPTIONAL, "The environment settings to list")
       //->addOption('env', 'e', InputOption::VALUE_NONE, "List only the available environments");
@@ -44,7 +44,6 @@ class SettingsDiscoverCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $settings = SettingsReader::readYaml('.syncer.settings.yml');
-
 
     $printable = Yaml::dump($settings, 4, 6);
     $output->write($printable);

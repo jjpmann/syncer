@@ -1,0 +1,15 @@
+local:
+  database:
+    username: "root"
+    password: "root"
+    database: "ncarb_demo"
+remote:
+  ssh:
+    host: 127.0.0.1:24
+    username: vagrant
+    private-key: ~/.ssh/id_rsa
+  database:
+    host: localhost
+    username: homestead
+    password: secret
+    database: ncarb_demo_test2
