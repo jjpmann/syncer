@@ -41,18 +41,21 @@ syncer settings:list
 ```
 
 The settings file contains data sources with ssh and/or database connection settings. For example the following:
- local:
-     database:
-         username: db-user
-         password: db-password
-         database: db-name
-         
+
+```yml
+    local:
+        database:
+            username: db-user
+            password: db-password
+            database: db-name
+```
  
  specifies the settings for a data location with the name `local` which has connection settings for a mysql database. 
  
  The following:
  
- remote:
+ 
+    remote:
        ssh:
              host: '127.0.0.1:24'
              username: vagrant
