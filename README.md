@@ -15,14 +15,14 @@ The tool was intended to assist with syncing a database between two locations ov
 Run the `list` command to see the list of available commands. 
 
 ```sh
-php syncer.php list
+syncer list
 ```
 
 If you need the details of any particular command, check the available help instructions for the command. For example
 if I wanted to get some help on the `push` command I would run:
 
 ```sh
-php syncer.php help push
+syncer help push
 ```
 
 ## Connection Settings
@@ -31,13 +31,13 @@ You specify the connection settings in a file `.syncer.settings.yml` which resid
 is not available you may generate a sample file with the following command: 
 
 ```sh
-php syncer.php settings:generate
+syncer settings:generate
 ```
 
 If there is already a `.syncer.settings.yml` file you may quickly check the connection settings with:
 
 ```sh
-php syncer.php settings:list
+syncer settings:list
 ```
 
 The settings file contains data sources with ssh and/or database connection settings. For example the following:
@@ -75,7 +75,7 @@ specifies a database in my local environment and a I have a `remote` location wh
  I would use the following command to sync them:
  
  ```sh
- php syncer.php --from local --to remote
+ syncer --from local --to remote
  ```
 
 ## TODO:
